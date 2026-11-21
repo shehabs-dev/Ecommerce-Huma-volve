@@ -1,15 +1,14 @@
-import 'package:ecommerce_app_huma_volve/core/helper/failure_message_helper.dart';
-import 'package:ecommerce_app_huma_volve/features/auth/presentation/view/login/screens/login_screen.dart';
 import 'package:ecommerce_app_huma_volve/features/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../../../core/helper/failure_message_helper.dart';
+import '../../../../../../../core/router/app_routes.dart';
 import '../../../../../../../core/theme.dart';
 import '../../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../../../core/widgets/primary_button.dart';
-import '../../../../../../main_navigation/screens/main_navigation_screen.dart';
 import '../../../../view_model/auth_cubit.dart';
-import '../../../sign_up/screens/sign_up_screen.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -20,19 +19,19 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController emailController;
+  late final TextEditingController usernameController;
   late final TextEditingController passwordController;
 
   @override
   initState() {
     super.initState();
-    emailController = TextEditingController();
+    usernameController = TextEditingController();
     passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    emailController.dispose();
+    usernameController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -46,15 +45,9 @@ class _LoginViewState extends State<LoginView> {
             SnackBar(content: Text(failureMessage(state.failure))),
           );
         } else if (state is Unauthenticated) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          );
+          context.goNamed(AppRoutes.signIn);
         } else if (state is Authenticated) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => MainNavigationScreen()),
-          );
+          context.goNamed(AppRoutes.home);
         }
       },
       builder: (context, state) {
@@ -90,16 +83,16 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     const SizedBox(height: 64),
                     CustomTextField(
-                      controller: emailController,
-                      hintText: 'Email Address',
+                      controller: usernameController,
+                      hintText: 'Username',
                       prefixIcon: Icons.email_outlined,
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.name,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return 'Please enter your username';
                         }
-                        if (!value.contains('@')) {
-                          return 'Please enter a valid email';
+                        if (value.contains('@') && value.contains('.')) {
+                          return 'Please enter a valid username';
                         }
                         return null;
                       },
@@ -138,7 +131,7 @@ class _LoginViewState extends State<LoginView> {
                       onPressed: () async {
                         if (_formKey.currentState?.validate() ?? false) {
                           await cubit.signIn(
-                            email: emailController.text.trim(),
+                            username: usernameController.text.trim(),
                             password: passwordController.text.trim(),
                           );
                         }
@@ -152,28 +145,7 @@ class _LoginViewState extends State<LoginView> {
                         const Text('Don\'t have an account? '),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (
-                                  context,
-                                  animation,
-                                  secondaryAnimation,
-                                ) => const SignUpScreen(),
-                                transitionsBuilder:
-                                    (
-                                      context,
-                                      animation,
-                                      secondaryAnimation,
-                                      child,
-                                    ) {
-                                      return FadeTransition(
-                                        opacity: animation,
-                                        child: child,
-                                      );
-                                    },
-                              ),
-                            );
+                            context.goNamed(AppRoutes.signUp);
                           },
                           child: Text(
                             'Sign Up',

@@ -1,3 +1,8 @@
+import 'package:ecommerce_app_huma_volve/features/details/data/data_source/details_remote_data_source.dart';
+import 'package:ecommerce_app_huma_volve/features/details/data/repository/details_repository_impl.dart';
+import 'package:ecommerce_app_huma_volve/features/details/domain/repository/details_repository.dart';
+import 'package:ecommerce_app_huma_volve/features/details/domain/usecases/get_product_by_id_usecase.dart';
+import 'package:ecommerce_app_huma_volve/features/details/presentation/view_model/details_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../features/auth/data/datasources/auth_remote_datasource.dart';
@@ -73,7 +78,27 @@ void setupLocator() {
 
   //____________________________________________________
 
-  //--_ Core Network
+  // Details Feature
+
+  //--- Cubit
+  sl.registerFactory(() => DetailsCubit(getProductByIdUsecase: sl()));
+
+  //--- UseCases
+  sl.registerLazySingleton(() => GetProductByIdUsecase(repository: sl()));
+
+  //--- Repository
+  sl.registerLazySingleton<DetailsRepository>(
+    () => DetailsRepositoryImpl(remote: sl()),
+  );
+
+  //--- Remote Datasources
+  sl.registerLazySingleton<DetailsRemoteDataSource>(
+    () => DetailsRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  //____________________________________________________
+
+  //--- Core Network
   sl.registerLazySingleton(() => ApiClient());
 
   //--- Core Storage

@@ -7,7 +7,7 @@ import '../constants/api_constants.dart';
 class ApiClient {
   final Dio dio;
   ApiClient()
-    : dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl))
+    : dio = Dio(BaseOptions(baseUrl: ApiConstants.dummyJsonUrl))
         ..interceptors.add(
           PrettyDioLogger(
             requestHeader: true,

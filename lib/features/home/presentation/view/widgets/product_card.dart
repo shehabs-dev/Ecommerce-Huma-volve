@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../core/router/app_routes.dart';
 import '../../../../../core/theme.dart';
-import '../../../../details/screens/product_details_screen.dart';
-import '../../../domain/entities/product_entity.dart';
+import '../../../../../core/shared/domain/entities/product_entity.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductEntity product;
@@ -13,17 +14,9 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            transitionDuration: const Duration(milliseconds: 500),
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                ProductDetailsScreen(product: product),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-          ),
+        context.pushNamed(
+          AppRoutes.productDetails,
+          pathParameters: {'id': product.id.toString()},
         );
       },
       child: Container(
@@ -54,7 +47,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       child: Image.network(
                         product.images[0],
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         width: double.infinity,
                         height: double.infinity,
                       ),

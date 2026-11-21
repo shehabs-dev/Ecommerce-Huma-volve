@@ -2,8 +2,8 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/error_handler.dart';
 import '../../../../core/failure/failure.dart';
-import '../../domain/entities/category_entity.dart';
-import '../../domain/entities/product_entity.dart';
+import '../../../../core/shared/domain/entities/category_entity.dart';
+import '../../../../core/shared/domain/entities/product_entity.dart';
 import '../../domain/repository/home_repository.dart';
 import '../datasources/home_remote_datasource.dart';
 
@@ -23,14 +23,14 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getProducts(
-    int categoryId, {
+  Future<Either<Failure, List<ProductEntity>>> getProductsByCategory(
+    String slug, {
     required int limit,
     required int offset,
   }) async {
     try {
-      final products = await _remoteDataSource.getProducts(
-        categoryId,
+      final products = await _remoteDataSource.getProductsByCategory(
+        slug,
         limit: limit,
         offset: offset,
       );

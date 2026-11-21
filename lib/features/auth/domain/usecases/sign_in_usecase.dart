@@ -9,9 +9,9 @@ class SignInUsecase {
   SignInUsecase({required this.authRepository});
 
   Future<Either<Failure, Unit>> invoke({
-    required String email,
+    required String username,
     required String password,
   }) async {
-    return await authRepository.signIn(email: email, password: password);
+    return await authRepository.signIn(username: username, password: password);
   }
 }
