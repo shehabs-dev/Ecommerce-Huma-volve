@@ -1,8 +1,8 @@
-import 'package:ecommerce_app_huma_volve/features/auth/presentation/view/login/screens/login_screen.dart';
-import 'package:ecommerce_app_huma_volve/features/main_navigation/screens/main_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme.dart';
 import '../../auth/presentation/view_model/auth_cubit.dart';
 
@@ -14,15 +14,9 @@ class SplashScreen extends StatelessWidget {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is Unauthenticated) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          );
+          context.goNamed(AppRoutes.signIn);
         } else if (state is Authenticated) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => MainNavigationScreen()),
-          );
+          context.goNamed(AppRoutes.home);
         }
       },
       child: Scaffold(

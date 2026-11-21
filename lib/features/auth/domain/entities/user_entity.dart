@@ -1,21 +1,23 @@
 class UserEntity {
   int id;
+  String firstName;
+  String lastName;
+  String maidenName;
+  int? age;
+  String gender;
   String email;
-  String password;
-  String name;
-  String role;
-  String avatar;
-  String creationAt;
-  String updatedAt;
+  String phone;
+  String username;
 
   UserEntity({
     required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.maidenName,
+    this.age,
+    required this.gender,
     required this.email,
-    required this.password,
-    required this.name,
-    required this.role,
-    required this.avatar,
-    required this.creationAt,
-    required this.updatedAt,
+    required this.phone,
+    required this.username,
   });
 }

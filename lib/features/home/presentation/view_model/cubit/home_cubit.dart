@@ -1,10 +1,10 @@
-import 'package:ecommerce_app_huma_volve/features/home/domain/usecases/get_category_usecase.dart';
-import 'package:ecommerce_app_huma_volve/features/home/domain/usecases/get_product_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/failure/failure.dart';
-import '../../../domain/entities/category_entity.dart';
-import '../../../domain/entities/product_entity.dart';
+import '../../../../../core/shared/domain/entities/category_entity.dart';
+import '../../../../../core/shared/domain/entities/product_entity.dart';
+import '../../../domain/usecases/get_category_usecase.dart';
+import '../../../domain/usecases/get_product_usecase.dart';
 
 part "home_state.dart";
 
@@ -44,7 +44,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> loadProductsByCID(int index) async {
-    if (index < 0 || index >= _category.length) return; // 1) bounds check
+    if (index < 0 || index >= _category.length) return;
 
     _products = [];
     _offset = 0;
@@ -57,17 +57,17 @@ class HomeCubit extends Cubit<HomeState> {
     emit(ProductLoading());
 
     final productsResult = await getProductUsecase.invoke(
-      _category[index].id,
+      _category[index].slug,
       limit: _limit,
       offset: _offset,
     );
 
     if (isClosed || requestId != _latestRequestId) return;
-    _isFetching = false; // 2) release the flag, after the stale check
+    _isFetching = false;
 
     productsResult.fold((failure) => emit(ProductFailure(failure)), (data) {
       _products = data;
-      _offset += data.length; // 3) move by what arrived, not a fixed 10
+      _offset += data.length;
       _hasMore = data.length == _limit;
       emit(ProductSuccess(products: _products));
     });
@@ -78,12 +78,9 @@ class HomeCubit extends Cubit<HomeState> {
 
     final requestId = _latestRequestId;
     _isFetching = true;
-    emit(
-      ProductSuccess(products: _products, isLoadingMore: true),
-    ); // spinner on
-
+    emit(ProductSuccess(products: _products, isLoadingMore: true));
     final result = await getProductUsecase.invoke(
-      _category[_selectedIndex].id,
+      _category[_selectedIndex].slug,
       limit: _limit,
       offset: _offset,
     );
@@ -104,7 +101,7 @@ class HomeCubit extends Cubit<HomeState> {
         _products = [..._products, ...data];
         _offset += data.length;
         _hasMore = data.length == _limit;
-        emit(ProductSuccess(products: _products)); // spinner off
+        emit(ProductSuccess(products: _products));
       },
     );
   }

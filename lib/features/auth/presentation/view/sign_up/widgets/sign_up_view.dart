@@ -1,13 +1,14 @@
-import 'package:ecommerce_app_huma_volve/features/splash/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../core/helper/failure_message_helper.dart';
+import '../../../../../../core/router/app_routes.dart';
 import '../../../../../../core/theme.dart';
 import '../../../../../../core/widgets/custom_text_field.dart';
 import '../../../../../../core/widgets/primary_button.dart';
+import '../../../../../splash/screens/splash_screen.dart';
 import '../../../view_model/auth_cubit.dart';
-import '../../login/screens/login_screen.dart';
 
 class SignUpView extends StatefulWidget {
   const new({super.key});
@@ -54,10 +55,7 @@ class _SignUpViewState extends State<SignUpView> {
               content: Text("Account has been created!"),
             ),
           );
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          );
+          context.goNamed(AppRoutes.signIn);
         }
       },
       builder: (context, state) {
@@ -156,28 +154,7 @@ class _SignUpViewState extends State<SignUpView> {
                         const Text('Already have an account? '),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (
-                                  context,
-                                  animation,
-                                  secondaryAnimation,
-                                ) => const LoginScreen(),
-                                transitionsBuilder:
-                                    (
-                                      context,
-                                      animation,
-                                      secondaryAnimation,
-                                      child,
-                                    ) {
-                                      return FadeTransition(
-                                        opacity: animation,
-                                        child: child,
-                                      );
-                                    },
-                              ),
-                            );
+                            context.goNamed(AppRoutes.signIn);
                           },
                           child: Text(
                             'Login',

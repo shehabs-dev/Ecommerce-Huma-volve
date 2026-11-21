@@ -1,25 +1,19 @@
-import 'category_entity.dart';
-
 class ProductEntity {
   int id;
   String title;
-  String slug;
-  int price;
   String description;
-  CategoryEntity category;
+  String category;
+  double price;
   List<String> images;
-  String creationAt;
-  String updatedAt;
+  String? thumbnail;
 
   ProductEntity({
     required this.id,
     required this.title,
-    required this.slug,
-    required this.price,
     required this.description,
     required this.category,
+    required this.price,
     required this.images,
-    required this.creationAt,
-    required this.updatedAt,
+    this.thumbnail,
   });
 }

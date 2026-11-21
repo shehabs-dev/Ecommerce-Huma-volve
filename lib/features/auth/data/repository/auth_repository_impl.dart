@@ -25,11 +25,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, Unit>> signIn({
-    required String email,
+    required String username,
     required String password,
   }) async {
     try {
-      final token = await remote.signIn(email: email, password: password);
+      final token = await remote.signIn(username: username, password: password);
       await tokenStorage.saveTokens(
         access: token.accessToken,
         refresh: token.refreshToken,

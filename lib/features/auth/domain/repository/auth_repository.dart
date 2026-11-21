@@ -11,7 +11,7 @@ abstract class AuthRepository {
   });
 
   Future<Either<Failure, Unit>> signIn({
-    required String email,
+    required String username,
     required String password,
   });
 
